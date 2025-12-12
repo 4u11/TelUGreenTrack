@@ -17,7 +17,7 @@ class ScheduleResources extends JsonResource
         return [
             'location' => $this->location,
             'waste_type' => $this->waste_type,
-            'pcikup_time' => $this->pickup_time,
+            'pickup_time' => $this->pickup_time,
             'status' => $this->status,
         ];
     }
