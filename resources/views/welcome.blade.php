@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tel-U GreenTrack</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --primary-green: #10b981;
@@ -188,8 +189,14 @@
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand fw-bold" href="#">Tel-U GreenTrack</a>
-            <div class="d-flex">
-                <a href="#" class="btn btn-light btn-sm me-2">Log in</a>
+            <div class="d-flex gap-2">
+                <a href="/user-views" class="btn btn-info btn-sm fw-bold">
+                    <i class="fas fa-eye me-1"></i>User View
+                </a>
+                <a href="/dashboard" class="btn btn-warning btn-sm fw-bold">
+                    <i class="fas fa-user-shield me-1"></i>Admin
+                </a>
+                <a href="#" class="btn btn-light btn-sm">Log in</a>
                 <a href="#" class="btn btn-outline-light btn-sm">Register</a>
             </div>
         </div>

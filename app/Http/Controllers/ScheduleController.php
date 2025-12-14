@@ -22,7 +22,7 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-        return view('schedules.create');
+        return view('schedules.index');
     }
 
     /**
@@ -53,7 +53,7 @@ class ScheduleController extends Controller
      */
     public function edit(Schedule $schedule)
     {
-        return view('schedules.edit', compact('schedule'));
+        return view('schedules.index', compact('schedule'));
     }
 
     /**

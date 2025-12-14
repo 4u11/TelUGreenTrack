@@ -36,12 +36,28 @@
             margin-bottom: 1rem;
         }
         
+        .sidebar-header a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            transition: opacity 0.3s ease;
+            padding: 0;
+            border: none;
+        }
+        
+        .sidebar-header a:hover {
+            opacity: 0.8;
+            background: none;
+            padding: 0;
+        }
+        
         .sidebar-header h3 {
             font-weight: 700;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
+            margin: 0;
         }
         
         .sidebar-header h3::before {
@@ -242,26 +258,19 @@
 <div class="d-flex">
     <div class="sidebar col-md-2 d-none d-md-block d-flex flex-column">
         <div class="sidebar-header">
-            <h3>GreenTrack</h3>
+            <a href="{{ url('/') }}">
+                <h3>Tel-U GreenTrack</h3>
+            </a>
         </div>
         
-        <a href="#"><i class="fas fa-home"></i> Dashboard</a>
-        <a href="#" class="active"><i class="fas fa-calendar-alt"></i> Schedules</a>
-        <a href="#" onclick="alert('Module under development by Delon')">
-            <i class="fas fa-trash"></i> Trashcans
-            <span class="dev-badge ms-auto">Soon</span>
-        </a>
-        <a href="#" onclick="alert('Module under development by Delon')">
-            <i class="fas fa-users"></i> Users
-            <span class="dev-badge ms-auto">Soon</span>
-        </a>
-        <a href="#" onclick="alert('Module under development by Kinan')">
-            <i class="fas fa-leaf"></i> Emission Tracker
-            <span class="dev-badge ms-auto">Soon</span>
-        </a>
+        <a href="{{ url('/dashboard') }}" class="active"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="{{ url('/schedules') }}"><i class="fas fa-calendar-alt"></i> Schedules</a>
+        <a href="{{ url('/trashcans-ui') }}"><i class="fas fa-trash"></i> Trashcans</a>
+        <a href="{{ url('/users-ui') }}"><i class="fas fa-users"></i> Users</a>
+        <a href="{{ url('/admin/emissions') }}"><i class="fas fa-leaf"></i> Emission Tracker</a>
         
         <div class="sidebar-footer mt-auto">
-            <form method="POST" action="#" class="d-inline w-100">
+        
                 <button type="submit" class="btn-logout">
                     <i class="fas fa-sign-out-alt me-3"></i> Logout
                 </button>
@@ -287,7 +296,7 @@
                 <div class="stats-card orange">
                     <i class="fas fa-calendar-check icon"></i>
                     <h5>Pending Pickups</h5>
-                    <h3>8</h3>
+                    <h3>{{ \App\Models\Schedule::count() }}</h3>
                 </div>
             </div>
             <div class="col-md-4 mb-3">
@@ -303,7 +312,7 @@
             <h4><i class="fas fa-bolt me-2"></i>Quick Actions</h4>
             <p>Manage the waste collection system for Telkom University efficiently.</p>
             <div class="d-flex gap-3 flex-wrap">
-                <a href="#" class="btn btn-primary-green">
+                <a href="{{ url('/schedules') }}" class="btn btn-primary-green">
                     <i class="fas fa-plus me-2"></i> Schedule New Pickup
                 </a>
                 <button class="btn btn-outline-green" onclick="alert('Report generation feature coming soon')">
