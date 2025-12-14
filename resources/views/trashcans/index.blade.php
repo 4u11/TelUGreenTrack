@@ -1,61 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trashcan Management</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Trashcan Management</h2>
-            <a href="/users-ui" class="btn btn-outline-secondary">Go to User Management</a>
-        </div>
+@extends('layouts.app')
 
-        <div class="card mb-4">
-            <div class="card-header bg-success text-white">Add New Trashcan</div>
-            <div class="card-body">
-                <form id="addTrashcanForm">
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label>Location</label>
-                            <input type="text" id="location" class="form-control" placeholder="e.g. TULT Gate 1" required>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Waste Type</label>
-                            <select id="waste_type" class="form-control" required>
-                                <option value="organic">Organic</option>
-                                <option value="inorganic">Inorganic</option>
-                                <option value="hazardous">Hazardous</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Capacity (Liters)</label>
-                            <input type="number" id="capacity" class="form-control" placeholder="e.g. 50" required>
-                        </div>
+@section('title', 'Trashcan Management')
+
+@section('content')
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Trashcan Management</h2>
+    </div>
+
+    <div class="card mb-4" id="adminSection" style="display: none;">
+        <div class="card-header bg-white fw-bold text-success">Add New Trashcan</div>
+        <div class="card-body">
+            <form id="addTrashcanForm">
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="text" id="location" class="form-control" placeholder="Location" required>
                     </div>
-                    <button type="submit" class="btn btn-success">Add Trashcan</button>
-                </form>
-            </div>
+                    <div class="col-md-4">
+                        <select id="waste_type" class="form-control">
+                            <option value="organic">Organic</option>
+                            <option value="inorganic">Inorganic</option>
+                            <option value="hazardous">Hazardous</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" id="capacity" class="form-control" placeholder="Capacity (L)" required>
+                    </div>
+                    <div class="col-md-1">
+                        <button type="submit" class="btn btn-success w-100">Add</button>
+                    </div>
+                </div>
+            </form>
         </div>
+    </div>
 
-        <div class="card">
-            <div class="card-body">
-                <table class="table table-bordered table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Location</th>
-                            <th>Type</th>
-                            <th>Capacity</th>
-                            <th style="width: 25%;">Fill Level</th> <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="trashcanTableBody">
-                        </tbody>
-                </table>
-            </div>
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Location</th>
+                        <th class="text-center">Type</th>
+                        <th class="text-center" style="width: 30%;">Fill Level</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="trashcanTableBody"></tbody>
+            </table>
         </div>
     </div>
 
@@ -83,114 +73,112 @@
             </div>
         </div>
     </div>
+@endsection
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        const apiUrl = '/api/trashcans';
-        let editModal;
-        
-        async function loadTrashcans() {
-            try {
-                const response = await fetch(apiUrl);
-                const result = await response.json();
+@push('scripts')
+<script>
+    const apiUrl = '/api/trashcans';
+    let editModal;
+    if (role === 'admin') {
+        document.getElementById('adminSection').style.display = 'block';
+    }
 
-                const tableBody = document.getElementById('trashcanTableBody');
-                tableBody.innerHTML = '';
-
-                const trashcans = result.data ? result.data : result;
-
-                trashcans.forEach(trashcan => {
-                    let progressColor = 'bg-success';
-                    if(trashcan.fill_level > 50) progressColor = 'bg-warning';
-                    if(trashcan.fill_level > 80) progressColor = 'bg-danger';
-
-                    const row = `
-                        <tr>
-                            <td>${trashcan.id}</td>
-                            <td>${trashcan.location}</td>
-                            <td><span class="badge bg-secondary">${trashcan.waste_type}</span></td>
-                            <td>${trashcan.capacity} L</td>
-                            <td>
-                                <div class="progress" style="height: 20px;">
-                                    <div class="progress-bar ${progressColor}" role="progressbar"
-                                        style="width: ${trashcan.fill_level}%"
-                                        aria-valuenow="${trashcan.fill_level}" aria-valuemin="0" aria-valuemax="100">
-                                        ${trashcan.fill_level}%
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <button class="btn btn-primary btn-sm"
-                                    onclick="openEditModal(${trashcan.id}, '${trashcan.location}', ${trashcan.fill_level})">
-                                    Edit
-                                </button>
-                                <button class="btn btn-danger btn-sm" onclick="deleteTrashcan(${trashcan.id})">Delete</button>
-                            </td>
-                        </tr>
-                    `;
-                    tableBody.insertAdjacentHTML('beforeend', row);
-                });
-            } catch (error) {
-                console.error("Error loading data:", error);
-            }
-        }
-
-        document.getElementById('addTrashcanForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const data = {
-                location: document.getElementById('location').value,
-                waste_type: document.getElementById('waste_type').value,
-                capacity: document.getElementById('capacity').value,
-                fill_level: 0
-            };
-
-            await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify(data)
+    async function loadTrashcans() {
+        try {
+            const response = await fetch(apiUrl, {
+                headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
             });
 
-            e.target.reset();
-            loadTrashcans();
+            if (response.status === 401) { window.location.href = '/login'; return; }
+
+            const result = await response.json();
+            const tbody = document.getElementById('trashcanTableBody');
+            tbody.innerHTML = '';
+
+            (result.data || []).forEach(item => {
+                let buttons = '';
+                let progressColor = 'bg-success';
+                if(item.fill_level > 50) progressColor = 'bg-warning';
+                if(item.fill_level > 80) progressColor = 'bg-danger';
+
+                if (role === 'admin') {
+                    buttons = `
+                        <button class="btn btn-primary btn-sm me-1"
+                            onclick="openEditModal(${item.id}, '${item.location}', ${item.fill_level})">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteItem(${item.id})">Delete</button>
+                    `;
+                } else {
+                    buttons = `<span class="badge bg-light text-dark border">View Only</span>`;
+                }
+
+                tbody.insertAdjacentHTML('beforeend', `
+                    <tr>
+                        <td>${item.location}</td>
+                        <td class="text-center"><span class="badge bg-secondary">${item.waste_type}</span></td>
+                        <td class="text-center">
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar ${progressColor}" style="width: ${item.fill_level}%">${item.fill_level}%</div>
+                            </div>
+                        </td>
+                        <td class="text-center">${buttons}</td>
+                    </tr>
+                `);
+            });
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    document.getElementById('addTrashcanForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const data = {
+            location: document.getElementById('location').value,
+            waste_type: document.getElementById('waste_type').value,
+            capacity: document.getElementById('capacity').value
+        };
+
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         });
 
-        function openEditModal(id, location, fillLevel) {
-            document.getElementById('edit_id').value = id;
-            document.getElementById('edit_location').value = location;
-            document.getElementById('edit_fill_level').value = fillLevel;
-
-            editModal = new bootstrap.Modal(document.getElementById('editModal'));
-            editModal.show();
-        }
-
-        async function updateTrashcan() {
-            const id = document.getElementById('edit_id').value;
-            const data = {
-                location: document.getElementById('edit_location').value,
-                fill_level: document.getElementById('edit_fill_level').value
-            };
-
-            await fetch(`${apiUrl}/${id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            editModal.hide();
+        if (response.ok) {
+            alert("Success: Trashcan Added");
+            e.target.reset();
             loadTrashcans();
+        } else {
+            const err = await response.json();
+            alert("Failed: " + (err.message || "Unknown error"));
         }
+    });
 
-        async function deleteTrashcan(id) {
-            if(!confirm('Are you sure you want to delete this trashcan?')) return;
+    function openEditModal(id, location, fillLevel) {
+        document.getElementById('edit_id').value = id;
+        document.getElementById('edit_location').value = location;
+        document.getElementById('edit_fill_level').value = fillLevel;
+        editModal = new bootstrap.Modal(document.getElementById('editModal'));
+        editModal.show();
+    }
 
-            await fetch(`${apiUrl}/${id}`, {
-                method: 'DELETE'
-            });
-            loadTrashcans();
-        }
-
+    async function updateTrashcan() {
+        const id = document.getElementById('edit_id').value;
+        const data = { location: document.getElementById('edit_location').value, fill_level: document.getElementById('edit_fill_level').value };
+        await fetch(`${apiUrl}/${id}`, { method: 'PUT', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+        editModal.hide();
         loadTrashcans();
-    </script>
-</body>
-</html>
+    }
+
+    async function deleteItem(id) {
+        if(!confirm('Delete?')) return;
+        await fetch(`${apiUrl}/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+        loadTrashcans();
+    }
+
+    loadTrashcans();
+</script>
+@endpush
