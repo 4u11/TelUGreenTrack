@@ -19,3 +19,10 @@ Route::get('/trashcans-ui', function () {
 Route::get('/users-ui', function () {
     return view('users.index');
 });
+use App\Http\Controllers\Admin\EmissionController;
+
+Route::resource('schedules', ScheduleController::class);
+
+Route::prefix('admin')->name('admin.')->group(function () {
+Route::resource('emissions', EmissionController::class);
+});
