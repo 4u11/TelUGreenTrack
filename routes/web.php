@@ -27,6 +27,13 @@ Route::get('/user-views', function () {
 
 // Miftahul
 Route::resource('schedules', ScheduleController::class);
+Route::get('/', function () {return view('welcome'); });
+Route::get('/login', function () { return view('auth.login'); })->name('login');
+Route::get('/register', function () { return view('auth.register'); });
+Route::get('/trashcans-ui', function () { return view('trashcans.index'); });
+Route::get('/users-ui', function () { return view('users.index'); });
+Route::get('/admin-dashboard', function () {return view('admin.dashboard');});
+Route::get('/regular-dashboard', function () {return view('regular.dashboard');});
 
 // Kinan
 Route::prefix('admin')->name('admin.')->group(function () {
