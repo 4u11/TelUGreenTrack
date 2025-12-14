@@ -1,6 +1,7 @@
 <?php
-
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\ScheduleController;
+use App\Http\Controllers\Api\TrashcanApiController;
+use App\Http\Controllers\Api\UserApiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TrashcanController;
@@ -31,4 +32,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::apiResource('users', UserController::class);
     });
 
-});
+Route::apiResource('schedules', ScheduleController::class);
+Route::apiResource('trashcans', TrashcanApiController::class);
+Route::apiResource('users', UserApiController::class);
