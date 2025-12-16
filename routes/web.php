@@ -43,16 +43,40 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('emissions', EmissionController::class);
 });
 
-// --- User Views (Mockup/UI Only) ---
+// --- User Views 
 Route::get('/user-views', function () {
     $schedules = Schedule::where('pickup_time', '>=', now())
                          ->orderBy('pickup_time', 'asc')
                          ->take(5) 
                          ->get();
     $trashcans = \App\Models\Trashcan::all(); 
-    $emission = \App\Models\Emission::latest()->first();
+    $totalVolume = \App\Models\Emission::sum('volume');         
+    
+    
+    $energySaved = $totalVolume * 2.5; 
 
-    return view('user-views', compact('schedules', 'trashcans', 'emission'));
+    $offsetAmount = $totalVolume * 0.3; // Logika offset karbon
+
+    
+    $targetVolume = 1000; 
+    $sdg12_score = $totalVolume > 0 ? min(round(($totalVolume / $targetVolume) * 100), 100) : 0;
+    
+    $targetOffset = 500;
+    $sdg11_score = $offsetAmount > 0 ? min(round(($offsetAmount / $targetOffset) * 100), 100) : 0;
+
+    $emissionData = (object) [
+        'energy_saved' => $energySaved,    
+        'recycled_amount' => $totalVolume,
+        'offset_amount' => $offsetAmount,
+        'sdg_11_score' => $sdg11_score,
+        'sdg_12_score' => $sdg12_score,
+    ];
+
+    return view('user-views', [
+        'schedules' => $schedules,
+        'trashcans' => $trashcans,
+        'emission' => $emissionData
+    ]);
 })->name('user.views');
 
 Route::get('/trashcans-ui', function () {

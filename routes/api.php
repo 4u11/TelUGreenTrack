@@ -2,10 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Api\ScheduleController;
+use App\Http\Controllers\Api\ScheduleApiController;
 use App\Http\Controllers\Api\TrashcanApiController;
 use App\Http\Controllers\Api\UserApiController;
-
+use App\Http\Controllers\Api\EmissionAPIController;
 /*
 |--------------------------------------------------------------------------
 | API Routes - PUBLIC DEMO VERSION
@@ -17,6 +17,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
-Route::apiResource('schedules', ScheduleController::class);
+Route::apiResource('schedules', ScheduleApiController::class);
 Route::apiResource('trashcans', TrashcanApiController::class);
 Route::apiResource('users', UserApiController::class);
+Route::apiResource('emissions', EmissionAPIController::class);

@@ -354,15 +354,18 @@
                 <h2>Emission Tracking</h2>
             </div>
             
-            @if($emission)
+  @if($emission)
             <div class="row mb-4">
+                
                 <div class="col-md-4 mb-3">
                     <div class="emission-item text-center">
-                        <i class="fas fa-truck text-success fa-2x mb-3"></i>
-                        <div class="metric-value">{{ number_format($emission->co2_vehicle ?? 0) }} kg</div>
-                        <div class="metric-label">CO₂ from Vehicles</div>
+                        <i class="fas fa-bolt text-warning fa-2x mb-3"></i>
+                        
+                        <div class="metric-value">{{ number_format($emission->energy_saved ?? 0) }} kWh</div>
+                        <div class="metric-label">Energy Conserved</div>
                     </div>
                 </div>
+
                 <div class="col-md-4 mb-3">
                     <div class="emission-item text-center">
                         <i class="fas fa-recycle text-success fa-2x mb-3"></i>
@@ -370,37 +373,12 @@
                         <div class="metric-label">Waste Recycled</div>
                     </div>
                 </div>
+
                 <div class="col-md-4 mb-3">
                     <div class="emission-item text-center">
                         <i class="fas fa-tree text-success fa-2x mb-3"></i>
                         <div class="metric-value">{{ number_format($emission->offset_amount ?? 0) }} kg</div>
                         <div class="metric-label">CO₂ Offset</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="emission-item">
-                <div class="item-header">
-                    <h3 class="item-title"><i class="fas fa-bullseye me-2"></i>SDG Progress</h3>
-                </div>
-                
-                <div class="mb-3">
-                    <div class="d-flex justify-content-between small mb-1">
-                        <span><strong>SDG 11:</strong> Sustainable Cities</span>
-                        <span>{{ $emission->sdg_11_score ?? 0 }}%</span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar" style="width: {{ $emission->sdg_11_score ?? 0 }}%"></div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="d-flex justify-content-between small mb-1">
-                        <span><strong>SDG 12:</strong> Responsible Consumption</span>
-                        <span>{{ $emission->sdg_12_score ?? 0 }}%</span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar" style="width: {{ $emission->sdg_12_score ?? 0 }}%"></div>
                     </div>
                 </div>
             </div>
