@@ -41,9 +41,9 @@
                     localStorage.setItem('auth_token', data.access_token);
                     localStorage.setItem('user_role', data.user.role);
                     if (data.user.role === 'admin') {
-                        window.location.href = '/admin-dashboard';
+                        window.location.href = '/dashboard';
                     } else {
-                        window.location.href = '/regular-dashboard';
+                        window.location.href = '/user-views';
                     }
                 } else {
                     alert('Login Failed: ' + data.message);

@@ -1,37 +1,24 @@
 <?php
-use App\Http\Controllers\Api\ScheduleController;
-use App\Http\Controllers\Api\TrashcanApiController;
-use App\Http\Controllers\Api\UserApiController;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TrashcanController;
-use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\Api\ScheduleApiController;
+use App\Http\Controllers\Api\TrashcanApiController;
+use App\Http\Controllers\Api\UserApiController;
+use App\Http\Controllers\Api\EmissionAPIController;
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| API Routes - PUBLIC DEMO VERSION
 |--------------------------------------------------------------------------
 */
 
-
+//Removed authentication for demo purposes
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout']);
 
-
-Route::middleware(['auth:sanctum'])->group(function () {
-
-
-    Route::post('/logout', [AuthController::class, 'logout']);
-
-    Route::apiResource('trashcans', TrashcanController::class)->only(['index', 'show']);
-
-    Route::middleware(['role:admin'])->group(function () {
-
-        Route::apiResource('trashcans', TrashcanController::class)->except(['index', 'show']);
-
-        Route::apiResource('users', UserController::class);
-    });
-
-Route::apiResource('schedules', ScheduleController::class);
-Route::apiResource('trashcans', TrashcanApiController::class);
-Route::apiResource('users', UserApiController::class);
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::apiResource('users', UserApiController::class);
+    Route::apiResource('trashcans', TrashcanApiController::class);
+    Route::apiResource('emissions', EmissionAPIController::class);
+});

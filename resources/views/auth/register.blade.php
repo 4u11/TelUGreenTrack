@@ -25,7 +25,7 @@
                 <label>I am a...</label>
                 <select id="role" class="form-control">
                     <option value="student">Student</option>
-                    <option value="teacher">Teacher</option>
+                    <option value="teacher">Staff</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-success w-100">Register</button>

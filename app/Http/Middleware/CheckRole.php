@@ -12,11 +12,17 @@ class CheckRole
     public function handle(Request $request, Closure $next, string $role): Response
     {
         if (!Auth::check()) {
-            return response()->json(['message' => 'Unauthenticated.'], 401);
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Unauthenticated.'], 401);
+            }
+            return redirect()->route('login');
         }
 
         if (Auth::user()->role !== $role) {
-            return response()->json(['message' => 'Access Denied: You are not a ' . $role], 403);
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Access Denied: You are not a ' . $role], 403);
+            }
+            abort(403, 'Unauthorized access. You need to be a ' . $role);
         }
 
         return $next($request);

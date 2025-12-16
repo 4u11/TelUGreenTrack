@@ -5,42 +5,80 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TrashcanController;
 use App\Http\Controllers\Admin\EmissionController;
+use App\Models\Schedule; 
+use App\Models\Trashcan; 
+use App\Models\Emission;
+use App\Models\User;
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes - PUBLIC DEMO VERSION
+|--------------------------------------------------------------------------
+*/
 
-// 1. Landing Page
+// --- Halaman Depan ---
 Route::get('/', function () {
     return view('welcome');
 });
 
-// 2. Dashboard (OPEN TO EVERYONE)
-//removed ->middleware(['auth']) so it won't ask for a login
+// --- Dashboard Routes ---
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-// 3. User Views (Public Information Dashboard)
-Route::get('/user-views', function () {
-    return view('user-views');
-})->name('user.views');
 
-// Public access
+Route::get('/regular-dashboard', function () {
+    return view('regular.dashboard');
+});
 
-// Miftahul
-Route::resource('schedules', ScheduleController::class);
-Route::get('/', function () {return view('welcome'); });
+// --- Auth Views 
 Route::get('/login', function () { return view('auth.login'); })->name('login');
 Route::get('/register', function () { return view('auth.register'); });
-Route::get('/trashcans-ui', function () { return view('trashcans.index'); });
-Route::get('/users-ui', function () { return view('users.index'); });
-Route::get('/admin-dashboard', function () {return view('admin.dashboard');});
-Route::get('/regular-dashboard', function () {return view('regular.dashboard');});
 
-// Kinan
+// --- SCHEDULES CRUD
+Route::resource('schedules', ScheduleController::class);
+
+// --- Admin Routes ---
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('emissions', EmissionController::class);
 });
 
-// Delon 
+// --- User Views 
+Route::get('/user-views', function () {
+    $schedules = Schedule::where('pickup_time', '>=', now())
+                         ->orderBy('pickup_time', 'asc')
+                         ->take(5) 
+                         ->get();
+    $trashcans = \App\Models\Trashcan::all(); 
+    $totalVolume = \App\Models\Emission::sum('volume');         
+    
+    
+    $energySaved = $totalVolume * 2.5; 
+
+    $offsetAmount = $totalVolume * 0.3; // Logika offset karbon
+
+    
+    $targetVolume = 1000; 
+    $sdg12_score = $totalVolume > 0 ? min(round(($totalVolume / $targetVolume) * 100), 100) : 0;
+    
+    $targetOffset = 500;
+    $sdg11_score = $offsetAmount > 0 ? min(round(($offsetAmount / $targetOffset) * 100), 100) : 0;
+
+    $emissionData = (object) [
+        'energy_saved' => $energySaved,    
+        'recycled_amount' => $totalVolume,
+        'offset_amount' => $offsetAmount,
+        'sdg_11_score' => $sdg11_score,
+        'sdg_12_score' => $sdg12_score,
+    ];
+
+    return view('user-views', [
+        'schedules' => $schedules,
+        'trashcans' => $trashcans,
+        'emission' => $emissionData
+    ]);
+})->name('user.views');
+
 Route::get('/trashcans-ui', function () {
     return view('trashcans.index');
 });

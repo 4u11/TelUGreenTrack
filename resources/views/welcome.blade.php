@@ -196,8 +196,8 @@
                 <a href="/dashboard" class="btn btn-warning btn-sm fw-bold">
                     <i class="fas fa-user-shield me-1"></i>Admin
                 </a>
-                <a href="#" class="btn btn-light btn-sm">Log in</a>
-                <a href="#" class="btn btn-outline-light btn-sm">Register</a>
+                <a href="/login" class="btn btn-light btn-sm">Log in</a>
+                <a href="/register" class="btn btn-outline-light btn-sm">Register</a>
             </div>
         </div>
     </nav>
@@ -215,30 +215,40 @@
         </div>
     </header>
 
-    <section id="features" class="container">
+   <section id="features" class="container">
         <h2 class="section-title display-5">Why Choose GreenTrack?</h2>
         <div class="row">
+            
             <div class="col-md-4 mb-4">
-                <div class="feature-card">
-                    <div class="feature-icon">📍</div>
-                    <h3>Locate Trashcans</h3>
-                    <p>Easily find the nearest Organic, Inorganic, or Hazardous waste bin anywhere on campus with our interactive map system.</p>
-                </div>
+                <a href="/user-views" class="card-link">
+                    <div class="feature-card">
+                        <div class="feature-icon">📍</div>
+                        <h3>Locate Trashcans</h3>
+                        <p>Easily find the nearest Organic, Inorganic, or Hazardous waste bin anywhere on campus with our interactive map system.</p>
+                    </div>
+                </a>
             </div>
+
             <div class="col-md-4 mb-4">
-                <div class="feature-card">
-                    <div class="feature-icon">📅</div>
-                    <h3>Smart Scheduling</h3>
-                    <p>Intelligent pickup schedules based on real-time fill levels to prevent overflow and optimize collection routes.</p>
-                </div>
+                <a href="/user-views" class="card-link">
+                    <div class="feature-card">
+                        <div class="feature-icon">📅</div>
+                        <h3>Smart Scheduling</h3>
+                        <p>Intelligent pickup schedules based on real-time fill levels to prevent overflow and optimize collection routes.</p>
+                    </div>
+                </a>
             </div>
+
             <div class="col-md-4 mb-4">
-                <div class="feature-card">
-                    <div class="feature-icon">🌍</div>
-                    <h3>Emission Tracker</h3>
-                    <p>Monitor greenhouse gas emissions and track your contribution to achieving SDG 11 & 12 sustainability targets.</p>
-                </div>
+                <a href="/user-views" class="card-link">
+                    <div class="feature-card">
+                        <div class="feature-icon">🌍</div>
+                        <h3>Emission Tracker</h3>
+                        <p>Monitor greenhouse gas emissions and track your contribution to achieving SDG 11 & 12 sustainability targets.</p>
+                    </div>
+                </a>
             </div>
+
         </div>
     </section>
 
