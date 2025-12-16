@@ -15,7 +15,7 @@
         <div class="container">
             <span class="navbar-brand mb-0 h1">GreenTrack Management</span>
             <div>
-                <a href="#" id="dashboardLink" class="btn btn-outline-light btn-sm me-2">Back to Dashboard</a>
+                <a href="/dashboard" id="dashboardLink" class="btn btn-outline-light btn-sm me-2">Back to Dashboard</a>
                 <button onclick="logout()" class="btn btn-outline-light btn-sm">Logout</button>
             </div>
         </div>
@@ -40,7 +40,7 @@
         if (role === 'admin') {
             dashLink.href = '/dashboard';
         } else {
-            dashLink.href = '/users-views';
+            dashLink.href = '/user-views';
         }
         const token = localStorage.getItem('auth_token');
         if (!token && window.location.pathname !== '/login' && window.location.pathname !== '/' && window.location.pathname !== '/register') {

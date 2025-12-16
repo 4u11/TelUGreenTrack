@@ -43,7 +43,7 @@
                     if (data.user.role === 'admin') {
                         window.location.href = '/dashboard';
                     } else {
-                        window.location.href = '/users-views';
+                        window.location.href = '/user-views';
                     }
                 } else {
                     alert('Login Failed: ' + data.message);

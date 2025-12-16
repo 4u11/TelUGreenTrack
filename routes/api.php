@@ -17,7 +17,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
-Route::apiResource('schedules', ScheduleApiController::class);
-Route::apiResource('trashcans', TrashcanApiController::class);
-Route::apiResource('users', UserApiController::class);
-Route::apiResource('emissions', EmissionAPIController::class);
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::apiResource('users', UserApiController::class);
+    Route::apiResource('trashcans', TrashcanApiController::class);
+    Route::apiResource('emissions', EmissionAPIController::class);
+});
