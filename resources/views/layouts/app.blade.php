@@ -38,9 +38,9 @@
         const dashLink = document.getElementById('dashboardLink');
 
         if (role === 'admin') {
-            dashLink.href = '/admin-dashboard';
+            dashLink.href = '/dashboard';
         } else {
-            dashLink.href = '/regular-dashboard';
+            dashLink.href = '/users-views';
         }
         const token = localStorage.getItem('auth_token');
         if (!token && window.location.pathname !== '/login' && window.location.pathname !== '/' && window.location.pathname !== '/register') {

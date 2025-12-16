@@ -250,237 +250,131 @@
             <p>View real-time waste management data for Telkom University</p>
         </div>
 
-        <!-- Schedules Section -->
         <div class="content-card">
             <div class="section-header">
                 <i class="fas fa-calendar-alt"></i>
                 <h2>Pickup Schedules</h2>
             </div>
             
+            @forelse($schedules as $schedule)
             <div class="schedule-item">
                 <div class="item-header">
-                    <h3 class="item-title"><i class="fas fa-map-marker-alt me-2"></i>Building A - Ground Floor</h3>
-                    <span class="waste-badge organic">Organic</span>
+                    <h3 class="item-title">
+                        <i class="fas fa-map-marker-alt me-2"></i>{{ $schedule->location }}
+                    </h3>
+                    <span class="waste-badge {{ strtolower($schedule->waste_type) }}">
+                        {{ $schedule->waste_type }}
+                    </span>
                 </div>
                 <div class="item-details">
                     <div class="item-detail">
                         <i class="fas fa-clock"></i>
-                        <span><strong>Pickup Time:</strong> Today, 09:00 AM</span>
+                        <span><strong>Time:</strong> {{ \Carbon\Carbon::parse($schedule->pickup_time)->format('H:i A') }}</span>
                     </div>
                     <div class="item-detail">
                         <i class="fas fa-calendar"></i>
-                        <span><strong>Date:</strong> December 15, 2025</span>
+                        <span><strong>Date:</strong> {{ \Carbon\Carbon::parse($schedule->pickup_time)->format('l, d M Y') }}</span>
                     </div>
                 </div>
             </div>
-
-            <div class="schedule-item">
-                <div class="item-header">
-                    <h3 class="item-title"><i class="fas fa-map-marker-alt me-2"></i>Building B - 2nd Floor</h3>
-                    <span class="waste-badge inorganic">Inorganic</span>
-                </div>
-                <div class="item-details">
-                    <div class="item-detail">
-                        <i class="fas fa-clock"></i>
-                        <span><strong>Pickup Time:</strong> Today, 02:00 PM</span>
-                    </div>
-                    <div class="item-detail">
-                        <i class="fas fa-calendar"></i>
-                        <span><strong>Date:</strong> December 15, 2025</span>
-                    </div>
-                </div>
+            @empty
+            <div class="text-center text-muted py-4">
+                <i class="fas fa-calendar-times fa-3x mb-3 opacity-25"></i>
+                <p>No upcoming schedules found.</p>
             </div>
-
-            <div class="schedule-item">
-                <div class="item-header">
-                    <h3 class="item-title"><i class="fas fa-map-marker-alt me-2"></i>Laboratory C</h3>
-                    <span class="waste-badge hazardous">Hazardous</span>
-                </div>
-                <div class="item-details">
-                    <div class="item-detail">
-                        <i class="fas fa-clock"></i>
-                        <span><strong>Pickup Time:</strong> Tomorrow, 10:00 AM</span>
-                    </div>
-                    <div class="item-detail">
-                        <i class="fas fa-calendar"></i>
-                        <span><strong>Date:</strong> December 16, 2025</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="schedule-item">
-                <div class="item-header">
-                    <h3 class="item-title"><i class="fas fa-map-marker-alt me-2"></i>Cafeteria - Main Hall</h3>
-                    <span class="waste-badge organic">Organic</span>
-                </div>
-                <div class="item-details">
-                    <div class="item-detail">
-                        <i class="fas fa-clock"></i>
-                        <span><strong>Pickup Time:</strong> Tomorrow, 04:00 PM</span>
-                    </div>
-                    <div class="item-detail">
-                        <i class="fas fa-calendar"></i>
-                        <span><strong>Date:</strong> December 16, 2025</span>
-                    </div>
-                </div>
-            </div>
+            @endforelse
         </div>
 
-        <!-- Trashcans Section -->
         <div class="content-card">
             <div class="section-header">
                 <i class="fas fa-trash"></i>
                 <h2>Trashcan Locations & Status</h2>
             </div>
             
-            <div class="trashcan-item">
-                <div class="item-header">
-                    <h3 class="item-title"><i class="fas fa-trash-alt me-2"></i>Trashcan #001</h3>
-                    <span class="status-badge available">Available</span>
-                </div>
-                <div class="item-details">
-                    <div class="item-detail">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span><strong>Location:</strong> Building A - Entrance</span>
+            @if(isset($trashcans) && $trashcans->count() > 0)
+                @foreach($trashcans as $can)
+                <div class="trashcan-item">
+                    <div class="item-header">
+                        <h3 class="item-title">
+                            <i class="fas fa-trash-alt me-2"></i>Trashcan #{{ $can->id }}
+                        </h3>
+                        
+                        @php
+                            $statusClass = 'available';
+                            $statusText = 'Available';
+                            if($can->status == 'maintenance') {
+                                $statusClass = 'maintenance';
+                                $statusText = 'Maintenance';
+                            } elseif ($can->fill_level >= 80) {
+                                $statusClass = 'full';
+                                $statusText = 'Full / Nearly Full';
+                            }
+                        @endphp
+                        
+                        <span class="status-badge {{ $statusClass }}">
+                            {{ $statusText }}
+                        </span>
                     </div>
-                    <div class="item-detail">
-                        <i class="fas fa-layer-group"></i>
-                        <span class="waste-badge organic">Organic</span>
-                    </div>
-                </div>
-                <div class="progress-bar-container">
-                    <div class="progress-label">
-                        <span>Fill Level</span>
-                        <span><strong>35%</strong></span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 35%"></div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="trashcan-item">
-                <div class="item-header">
-                    <h3 class="item-title"><i class="fas fa-trash-alt me-2"></i>Trashcan #002</h3>
-                    <span class="status-badge full">Nearly Full</span>
-                </div>
-                <div class="item-details">
-                    <div class="item-detail">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span><strong>Location:</strong> Building B - Lobby</span>
+                    <div class="item-details mb-2">
+                        <div class="item-detail">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>{{ $can->location }}</span>
+                        </div>
+                        <div class="item-detail">
+                            <i class="fas fa-layer-group"></i>
+                            <span class="text-capitalize">{{ $can->waste_type ?? 'General' }}</span>
+                        </div>
                     </div>
-                    <div class="item-detail">
-                        <i class="fas fa-layer-group"></i>
-                        <span class="waste-badge inorganic">Inorganic</span>
-                    </div>
-                </div>
-                <div class="progress-bar-container">
-                    <div class="progress-label">
-                        <span>Fill Level</span>
-                        <span><strong>85%</strong></span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: 85%"></div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="trashcan-item">
-                <div class="item-header">
-                    <h3 class="item-title"><i class="fas fa-trash-alt me-2"></i>Trashcan #003</h3>
-                    <span class="status-badge available">Available</span>
-                </div>
-                <div class="item-details">
-                    <div class="item-detail">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span><strong>Location:</strong> Library - 1st Floor</span>
-                    </div>
-                    <div class="item-detail">
-                        <i class="fas fa-layer-group"></i>
-                        <span class="waste-badge inorganic">Inorganic</span>
+                    <div class="progress-bar-container">
+                        <div class="d-flex justify-content-between small text-muted mb-1">
+                            <span>Fill Level</span>
+                            <strong>{{ $can->fill_level }}%</strong>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar {{ $can->fill_level > 80 ? 'bg-danger' : ($can->fill_level > 50 ? 'bg-warning' : '') }}" 
+                                 role="progressbar" 
+                                 style="width: {{ $can->fill_level }}%">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="progress-bar-container">
-                    <div class="progress-label">
-                        <span>Fill Level</span>
-                        <span><strong>50%</strong></span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 50%"></div>
-                    </div>
+                @endforeach
+            @else
+                <div class="text-center text-muted py-4">
+                    <p>Trashcan data is not available yet.</p>
                 </div>
-            </div>
-
-            <div class="trashcan-item">
-                <div class="item-header">
-                    <h3 class="item-title"><i class="fas fa-trash-alt me-2"></i>Trashcan #004</h3>
-                    <span class="status-badge maintenance">Maintenance</span>
-                </div>
-                <div class="item-details">
-                    <div class="item-detail">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span><strong>Location:</strong> Laboratory C - Storage</span>
-                    </div>
-                    <div class="item-detail">
-                        <i class="fas fa-layer-group"></i>
-                        <span class="waste-badge hazardous">Hazardous</span>
-                    </div>
-                </div>
-                <div class="progress-bar-container">
-                    <div class="progress-label">
-                        <span>Fill Level</span>
-                        <span><strong>Offline</strong></span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: 0%"></div>
-                    </div>
-                </div>
-            </div>
+            @endif
         </div>
 
-        <!-- Emissions Section -->
         <div class="content-card">
             <div class="section-header">
                 <i class="fas fa-leaf"></i>
                 <h2>Emission Tracking</h2>
             </div>
             
+            @if($emission)
             <div class="row mb-4">
                 <div class="col-md-4 mb-3">
                     <div class="emission-item text-center">
-                        <i class="fas fa-truck" style="font-size: 2.5rem; color: var(--primary-green); margin-bottom: 1rem;"></i>
-                        <div class="metric-value">2,340 kg</div>
-                        <div class="metric-label">CO₂ from Collection Vehicles</div>
+                        <i class="fas fa-truck text-success fa-2x mb-3"></i>
+                        <div class="metric-value">{{ number_format($emission->co2_vehicle ?? 0) }} kg</div>
+                        <div class="metric-label">CO₂ from Vehicles</div>
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="emission-item text-center">
-                        <i class="fas fa-recycle" style="font-size: 2.5rem; color: var(--primary-green); margin-bottom: 1rem;"></i>
-                        <div class="metric-value">8,560 kg</div>
-                        <div class="metric-label">Waste Recycled This Month</div>
+                        <i class="fas fa-recycle text-success fa-2x mb-3"></i>
+                        <div class="metric-value">{{ number_format($emission->recycled_amount ?? 0) }} kg</div>
+                        <div class="metric-label">Waste Recycled</div>
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="emission-item text-center">
-                        <i class="fas fa-tree" style="font-size: 2.5rem; color: var(--primary-green); margin-bottom: 1rem;"></i>
-                        <div class="metric-value">1,420 kg</div>
-                        <div class="metric-label">CO₂ Offset Equivalent</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="emission-item">
-                <div class="item-header">
-                    <h3 class="item-title"><i class="fas fa-chart-line me-2"></i>Monthly Emissions Overview</h3>
-                </div>
-                <div class="item-details">
-                    <div class="item-detail">
-                        <i class="fas fa-calendar"></i>
-                        <span><strong>Period:</strong> December 2025</span>
-                    </div>
-                    <div class="item-detail">
-                        <i class="fas fa-arrow-down"></i>
-                        <span style="color: #16a34a;"><strong>12% reduction</strong> from last month</span>
+                        <i class="fas fa-tree text-success fa-2x mb-3"></i>
+                        <div class="metric-value">{{ number_format($emission->offset_amount ?? 0) }} kg</div>
+                        <div class="metric-label">CO₂ Offset</div>
                     </div>
                 </div>
             </div>
@@ -489,26 +383,34 @@
                 <div class="item-header">
                     <h3 class="item-title"><i class="fas fa-bullseye me-2"></i>SDG Progress</h3>
                 </div>
-                <div class="progress-bar-container">
-                    <div class="progress-label">
-                        <span><strong>SDG 11:</strong> Sustainable Cities and Communities</span>
-                        <span><strong>78%</strong></span>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span><strong>SDG 11:</strong> Sustainable Cities</span>
+                        <span>{{ $emission->sdg_11_score ?? 0 }}%</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 78%"></div>
+                        <div class="progress-bar" style="width: {{ $emission->sdg_11_score ?? 0 }}%"></div>
                     </div>
                 </div>
-                <div class="progress-bar-container">
-                    <div class="progress-label">
-                        <span><strong>SDG 12:</strong> Responsible Consumption and Production</span>
-                        <span><strong>65%</strong></span>
+
+                <div>
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span><strong>SDG 12:</strong> Responsible Consumption</span>
+                        <span>{{ $emission->sdg_12_score ?? 0 }}%</span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 65%"></div>
+                        <div class="progress-bar" style="width: {{ $emission->sdg_12_score ?? 0 }}%"></div>
                     </div>
                 </div>
             </div>
+            @else
+            <div class="text-center text-muted py-4">
+                <p>Emission data is currently being calculated.</p>
+            </div>
+            @endif
         </div>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
