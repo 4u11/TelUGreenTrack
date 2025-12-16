@@ -55,7 +55,7 @@ Route::get('/user-views', function () {
     
     $energySaved = $totalVolume * 2.5; 
 
-    $offsetAmount = $totalVolume * 0.3; // Logika offset karbon
+    $offsetAmount = $totalVolume * 0.3; 
 
     
     $targetVolume = 1000; 

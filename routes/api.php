@@ -12,7 +12,6 @@ use App\Http\Controllers\Api\EmissionAPIController;
 |--------------------------------------------------------------------------
 */
 
-//Removed authentication for demo purposes
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout']);
@@ -21,4 +20,5 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::apiResource('users', UserApiController::class);
     Route::apiResource('trashcans', TrashcanApiController::class);
     Route::apiResource('emissions', EmissionAPIController::class);
+    Route::apiResource('schedules', ScheduleApiController::class);
 });
