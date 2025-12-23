@@ -23,12 +23,14 @@ class TrashcanController extends Controller
             'location' => 'required|string',
             'waste_type' => 'required|in:organic,inorganic,hazardous',
             'capacity' => 'required|integer',
+            'test_var' => 'required|string'
         ]);
 
         $trashcan = Trashcan::create([
             'location' => $request->location,
             'waste_type' => $request->waste_type,
             'capacity' => $request->capacity,
+            'test_var' => $request->test_var,
             'fill_level' => 0
         ]);
 

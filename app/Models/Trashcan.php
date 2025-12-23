@@ -11,6 +11,7 @@ class Trashcan extends Model
         'location',
         'waste_type',
         'capacity',
-        'fill_level'
+        'fill_level',
+        'test_var'
     ];
 }

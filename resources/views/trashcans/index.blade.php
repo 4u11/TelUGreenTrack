@@ -25,6 +25,9 @@
                     <div class="col-md-3">
                         <input type="number" id="capacity" class="form-control" placeholder="Capacity (L)" required>
                     </div>
+                    <div class="col-md-4">
+                        <input type="text" id="test_var" class="form-control" placeholder="Add sth here" required>
+                    </div>
                     <div class="col-md-1">
                         <button type="submit" class="btn btn-success w-100">Add</button>
                     </div>
@@ -41,6 +44,7 @@
                         <th>Location</th>
                         <th class="text-center">Type</th>
                         <th class="text-center" style="width: 30%;">Fill Level</th>
+                        <th class="text-center">New thingy</th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
@@ -120,6 +124,7 @@
                                 <div class="progress-bar ${progressColor}" style="width: ${item.fill_level}%">${item.fill_level}%</div>
                             </div>
                         </td>
+                        <td class="text-center"><span class="badge bg-secondary">${item.test_var}</span></td>
                         <td class="text-center">${buttons}</td>
                     </tr>
                 `);
@@ -135,7 +140,8 @@
         const data = {
             location: document.getElementById('location').value,
             waste_type: document.getElementById('waste_type').value,
-            capacity: document.getElementById('capacity').value
+            capacity: document.getElementById('capacity').value,
+            test_var: document.getElementById('test_var').value
         };
 
         const response = await fetch(apiUrl, {
