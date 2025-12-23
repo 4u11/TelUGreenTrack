@@ -288,7 +288,7 @@
         <div class="content-card">
             <div class="section-header">
                 <i class="fas fa-calendar-alt"></i>
-                <h2>Test new card</h2>
+                <h2>Hi, This is a new card that recently been added</h2>
             </div>
             
         </div>
