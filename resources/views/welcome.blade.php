@@ -198,6 +198,7 @@
                 </a>
                 <a href="/login" class="btn btn-light btn-sm">Log in</a>
                 <a href="/register" class="btn btn-outline-light btn-sm">Register</a>
+                <a href="/test" class="btn btn-outline-light btn-sm">Page add</a>
             </div>
         </div>
     </nav>

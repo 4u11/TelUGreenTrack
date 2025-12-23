@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ScheduleApiController;
 use App\Http\Controllers\Api\TrashcanApiController;
 use App\Http\Controllers\Api\UserApiController;
 use App\Http\Controllers\Api\EmissionAPIController;
+use App\Http\Controllers\TrashcanController;
 /*
 |--------------------------------------------------------------------------
 | API Routes - PUBLIC DEMO VERSION
@@ -15,10 +16,11 @@ use App\Http\Controllers\Api\EmissionAPIController;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout']);
-
-Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    Route::apiResource('users', UserApiController::class);
+Route::apiResource('users', UserApiController::class);
     Route::apiResource('trashcans', TrashcanApiController::class);
     Route::apiResource('emissions', EmissionAPIController::class);
     Route::apiResource('schedules', ScheduleApiController::class);
+    Route::apiResource('trashcans', TrashcanApiController::class);
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+
 });

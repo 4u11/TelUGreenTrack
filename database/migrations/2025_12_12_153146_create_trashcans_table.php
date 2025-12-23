@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('location');
             $table->enum('waste_type', ['organic', 'inorganic', 'hazardous']);
             $table->integer('capacity');
+            $table->string('test_var')->nullable();
             $table->integer('fill_level')->default(0);
             $table->timestamps();
         });

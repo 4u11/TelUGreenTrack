@@ -30,6 +30,9 @@ Route::get('/dashboard', function () {
 Route::get('/regular-dashboard', function () {
     return view('regular.dashboard');
 });
+Route::get('/test', function () {
+    return view('test');
+});
 
 // --- Auth Views 
 Route::get('/login', function () { return view('auth.login'); })->name('login');

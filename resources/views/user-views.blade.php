@@ -287,6 +287,14 @@
 
         <div class="content-card">
             <div class="section-header">
+                <i class="fas fa-calendar-alt"></i>
+                <h2>Test new card</h2>
+            </div>
+            
+        </div>
+
+        <div class="content-card">
+            <div class="section-header">
                 <i class="fas fa-trash"></i>
                 <h2>Trashcan Locations & Status</h2>
             </div>
